@@ -1,1 +1,22 @@
-
+{
+  "name": "remotion-ai-governance-video",
+  "version": "1.0.0",
+  "description": "Vídeo programático Remotion sobre Regulação de IA para TikTok e Instagram Reels",
+  "scripts": {
+    "start": "remotion preview src/index.ts",
+    "build": "node scripts/render.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.0",
+    "@remotion/cli": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.0.0"
+  }
+}
+```eof
