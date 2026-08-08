@@ -23,13 +23,16 @@ jobs:
       - name: Install FFmpeg and Chrome dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg chromium-browser
+          sudo apt-get install -y ffmpeg chromium-browser libgbm-dev
 
       - name: Install NPM Dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Render Video with Remotion Script
-        run: node scripts/render.mjs
+      - name: Ensure Output Directory
+        run: mkdir -p out
+
+      - name: Render Video with Remotion CLI
+        run: npx remotion render src/index.ts AIGovernanceVideo out/video-ai-governance.mp4 --chromium-options="--no-sandbox --disable-setuid-sandbox"
 
       - name: Upload Video Artifact for Download
         uses: actions/upload-artifact@v4
