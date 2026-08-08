@@ -9,20 +9,53 @@ import {
 } from 'remotion';
 
 const COLORS = {
-  bg: '#0B0F17',
-  glassBg: 'rgba(255, 255, 255, 0.07)',
-  glassBorder: 'rgba(255, 255, 255, 0.15)',
+  bg: '#080B11',
+  glassBg: 'rgba(255, 255, 255, 0.08)',
+  glassBorder: 'rgba(255, 255, 255, 0.18)',
   textPrimary: '#FFFFFF',
-  textSecondary: '#98A2B3',
+  textSecondary: '#A1A1AA',
   googleBlue: '#4285F4',
   googleRed: '#EA4335',
   googleYellow: '#FBBC05',
   googleGreen: '#34A853',
 };
 
-const FONTS = {
-  primary:
-    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif',
+// Componente para o fundo animado com orbes pulsantes
+const AnimatedBackground = () => {
+  const frame = useCurrentFrame();
+  const scale1 = 1 + Math.sin(frame / 20) * 0.1;
+  const scale2 = 1 + Math.cos(frame / 25) * 0.15;
+
+  return (
+    <>
+      <div
+        style={{
+          position: 'absolute',
+          top: '10%',
+          left: '-20%',
+          width: '700px',
+          height: '700px',
+          borderRadius: '50%',
+          background: `radial-gradient(circle, ${COLORS.googleBlue}50 0%, transparent 70%)`,
+          filter: 'blur(100px)',
+          transform: `scale(${scale1})`,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '10%',
+          right: '-20%',
+          width: '700px',
+          height: '700px',
+          borderRadius: '50%',
+          background: `radial-gradient(circle, ${COLORS.googleRed}40 0%, transparent 70%)`,
+          filter: 'blur(100px)',
+          transform: `scale(${scale2})`,
+        }}
+      />
+    </>
+  );
 };
 
 const GlassCard: React.FC<{
@@ -34,15 +67,16 @@ const GlassCard: React.FC<{
     <div
       style={{
         background: COLORS.glassBg,
-        backdropFilter: 'blur(30px)',
-        WebkitBackdropFilter: 'blur(30px)',
-        borderRadius: '36px',
-        border: `1.5px solid ${borderColor}`,
-        boxShadow: '0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
-        padding: '48px',
+        backdropFilter: 'blur(40px)',
+        WebkitBackdropFilter: 'blur(40px)',
+        borderRadius: '44px',
+        border: `2px solid ${borderColor}`,
+        boxShadow: '0 40px 80px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.3)',
+        padding: '56px 48px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
+        width: '100%',
         ...style,
       }}
     >
@@ -51,116 +85,139 @@ const GlassCard: React.FC<{
   );
 };
 
-const TagBadge: React.FC<{ text: string; color: string }> = ({ text, color }) => {
+const TagBadge: React.FC<{ text: string; color: string; icon?: string }> = ({
+  text,
+  color,
+  icon,
+}) => {
   return (
-    <span
+    <div
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        padding: '10px 24px',
+        gap: '12px',
+        padding: '14px 28px',
         borderRadius: '100px',
-        fontSize: '22px',
-        fontWeight: 700,
-        letterSpacing: '1px',
+        fontSize: '24px',
+        fontWeight: 800,
         color: '#FFFFFF',
         backgroundColor: color,
-        boxShadow: `0 8px 20px ${color}55`,
+        boxShadow: `0 10px 25px ${color}66`,
         textTransform: 'uppercase',
-        marginBottom: '20px',
+        marginBottom: '28px',
         width: 'fit-content',
       }}
     >
-      {text}
-    </span>
+      {icon && <span style={{ fontSize: '28px' }}>{icon}</span>}
+      <span>{text}</span>
+    </div>
   );
 };
 
+// CENA 1: HOOK
 const Scene1Intro = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const scale = spring({ frame, fps, config: { damping: 12, stiffness: 120 } });
+  const scale = spring({ frame, fps, config: { damping: 12, stiffness: 100 } });
   const opacity = interpolate(frame, [0, 15], [0, 1], { extrapolateRight: 'clamp' });
 
   return (
     <div style={{ transform: `scale(${scale})`, opacity, width: '100%' }}>
       <GlassCard borderColor={COLORS.googleBlue}>
-        <TagBadge text="08 AGOSTO 2026" color={COLORS.googleBlue} />
+        <TagBadge text="08 AGOSTO 2026" color={COLORS.googleBlue} icon="📅" />
         <h1
           style={{
-            fontSize: '68px',
-            fontWeight: 800,
+            fontSize: '72px',
+            fontWeight: 900,
             color: COLORS.textPrimary,
             lineHeight: 1.1,
-            margin: '10px 0 20px 0',
+            margin: '0 0 24px 0',
+            letterSpacing: '-1.5px',
           }}
         >
-          PANORAMA GLOBAL DA <span style={{ color: COLORS.googleBlue }}>REGULAÇÃO DE IA</span>
+          PANORAMA GLOBAL DA{' '}
+          <span
+            style={{
+              background: `linear-gradient(90deg, ${COLORS.googleBlue}, ${COLORS.googleGreen})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            REGULAÇÃO DE IA
+          </span>
         </h1>
         <p
           style={{
-            fontSize: '32px',
+            fontSize: '34px',
             color: COLORS.textSecondary,
-            lineHeight: 1.4,
+            lineHeight: 1.45,
             margin: 0,
+            fontWeight: 500,
           }}
         >
-          O mapa completo das novas leis que mudam o jogo no mundo do desenvolvimento e negócios.
+          O mapa completo das novas leis que mudam o jogo no mercado de tecnologia e inovação.
         </p>
       </GlassCard>
     </div>
   );
 };
 
+// CENA 2: UNIÃO EUROPEIA
 const Scene2EU = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
   const slideIn = spring({ frame, fps, config: { damping: 14 } });
-  const translateY = interpolate(slideIn, [0, 1], [100, 0]);
+  const translateY = interpolate(slideIn, [0, 1], [120, 0]);
 
   return (
     <div style={{ transform: `translateY(${translateY}px)`, width: '100%' }}>
       <GlassCard borderColor={COLORS.googleYellow}>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <TagBadge text="🇪🇺 UNIÃO EUROPEIA" color={COLORS.googleYellow} />
-          <TagBadge text="EU AI ACT" color="rgba(255,255,255,0.15)" />
-        </div>
+        <TagBadge text="🇪🇺 UNIÃO EUROPEIA" color={COLORS.googleYellow} icon="⚖️" />
 
         <h2
           style={{
-            fontSize: '56px',
+            fontSize: '58px',
             fontWeight: 800,
             color: COLORS.textPrimary,
             lineHeight: 1.15,
-            marginBottom: '24px',
+            marginBottom: '32px',
           }}
         >
           European AI Office Assume <span style={{ color: COLORS.googleYellow }}>Fiscalização Direta</span>
         </h2>
 
-        <ul
-          style={{
-            fontSize: '28px',
-            color: COLORS.textPrimary,
-            lineHeight: 1.5,
-            paddingLeft: '28px',
-            margin: 0,
-          }}
-        >
-          <li style={{ marginBottom: '16px' }}>
-            Poder de auditoria formal sobre modelos de IA de Uso Geral (GPAI).
-          </li>
-          <li style={{ marginBottom: '16px' }}>
-            Obrigatória a comprovação de dados de treino e rotulagem sintética.
-          </li>
-          <li>Multas pesadas para descumprimento de conformidade técnica.</li>
-        </ul>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {[
+            'Poder formal de auditoria sobre modelos GPAI',
+            'Comprovação obrigatória de dados de treino',
+            'Rotulagem ostensiva de mídias sintéticas',
+          ].map((item, index) => (
+            <div
+              key={index}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                fontSize: '28px',
+                color: COLORS.textPrimary,
+                background: 'rgba(255,255,255,0.05)',
+                padding: '18px 24px',
+                borderRadius: '20px',
+              }}
+            >
+              <span style={{ color: COLORS.googleYellow, fontSize: '30px' }}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
       </GlassCard>
     </div>
   );
 };
 
+// CENA 3: CHINA E EUA
 const Scene3ChinaUSA = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -170,37 +227,38 @@ const Scene3ChinaUSA = () => {
   return (
     <div
       style={{
-        transform: `scale(${interpolate(progress, [0, 1], [0.9, 1])})`,
+        transform: `scale(${interpolate(progress, [0, 1], [0.88, 1])})`,
         opacity: progress,
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        gap: '24px',
+        gap: '28px',
       }}
     >
-      <GlassCard borderColor={COLORS.googleRed} style={{ padding: '36px' }}>
-        <TagBadge text="🇨🇳 CHINA" color={COLORS.googleRed} />
-        <h3 style={{ fontSize: '38px', color: COLORS.textPrimary, margin: '8px 0' }}>
+      <GlassCard borderColor={COLORS.googleRed} style={{ padding: '40px' }}>
+        <TagBadge text="🇨🇳 CHINA" color={COLORS.googleRed} icon="🐉" />
+        <h3 style={{ fontSize: '40px', fontWeight: 800, color: COLORS.textPrimary, margin: '0 0 12px 0' }}>
           Agentes Antropomórficos & Finanças
         </h3>
-        <p style={{ fontSize: '26px', color: COLORS.textSecondary, margin: 0 }}>
-          Autuações do CAC para plataformas. Filtros rígidos de saúde mental e restrição de dados pessoais bancários.
+        <p style={{ fontSize: '28px', color: COLORS.textSecondary, margin: 0, lineHeight: 1.4 }}>
+          Autuações do CAC. Filtros de saúde mental obrigatórios e restrições a dados bancários.
         </p>
       </GlassCard>
 
-      <GlassCard borderColor={COLORS.googleBlue} style={{ padding: '36px' }}>
-        <TagBadge text="🇺🇸 ESTADOS UNIDOS" color={COLORS.googleBlue} />
-        <h3 style={{ fontSize: '38px', color: COLORS.textPrimary, margin: '8px 0' }}>
+      <GlassCard borderColor={COLORS.googleBlue} style={{ padding: '40px' }}>
+        <TagBadge text="🇺🇸 ESTADOS UNIDOS" color={COLORS.googleBlue} icon="🦅" />
+        <h3 style={{ fontSize: '40px', fontWeight: 800, color: COLORS.textPrimary, margin: '0 0 12px 0' }}>
           NIST x Fragmentação Estadual
         </h3>
-        <p style={{ fontSize: '26px', color: COLORS.textSecondary, margin: 0 }}>
-          Sem lei federal única: NIST cria regras de teste para Frontier Models enquanto Estados criam regras próprias.
+        <p style={{ fontSize: '28px', color: COLORS.textSecondary, margin: 0, lineHeight: 1.4 }}>
+          Novos testes do NIST para Frontier Models. Regras divididas entre estados como CA e NY.
         </p>
       </GlassCard>
     </div>
   );
 };
 
+// CENA 4: BRASIL
 const Scene4Brazil = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -210,38 +268,39 @@ const Scene4Brazil = () => {
   return (
     <div
       style={{
-        transform: `translateX(${interpolate(slide, [0, 1], [-100, 0])}px)`,
+        transform: `translateX(${interpolate(slide, [0, 1], [-120, 0])}px)`,
         width: '100%',
       }}
     >
       <GlassCard borderColor={COLORS.googleGreen}>
-        <TagBadge text="🇧🇷 BRASIL (PL 2338/2023)" color={COLORS.googleGreen} />
+        <TagBadge text="🇧🇷 BRASIL (PL 2338/2023)" color={COLORS.googleGreen} icon="🔰" />
         <h2
           style={{
-            fontSize: '52px',
+            fontSize: '54px',
             fontWeight: 800,
             color: COLORS.textPrimary,
             lineHeight: 1.2,
-            marginBottom: '20px',
+            marginBottom: '24px',
           }}
         >
           Liderança Regulatória na <span style={{ color: COLORS.googleGreen }}>América Latina</span>
         </h2>
         <p
           style={{
-            fontSize: '28px',
+            fontSize: '30px',
             color: COLORS.textSecondary,
             lineHeight: 1.5,
-            margin: '0 0 20px 0',
+            margin: 0,
           }}
         >
-          Substitutivo do PL 2338/2023 alinha o Brasil aos padrões europeus com foco na interoperabilidade e direitos contra decisões automatizadas.
+          Alinhamento aos padrões europeus para garantir interoperabilidade e proteger direitos dos usuários sobre decisões automatizadas.
         </p>
       </GlassCard>
     </div>
   );
 };
 
+// CENA 5: RESUMO & CTA
 const Scene5CTA = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -249,36 +308,39 @@ const Scene5CTA = () => {
   const pop = spring({ frame, fps, config: { damping: 10, stiffness: 100 } });
 
   return (
-    <div
-      style={{
-        transform: `scale(${pop})`,
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '24px',
-      }}
-    >
+    <div style={{ transform: `scale(${pop})`, width: '100%' }}>
       <GlassCard
         borderColor={COLORS.googleBlue}
         style={{
-          background: 'linear-gradient(135deg, rgba(66,133,244,0.2) 0%, rgba(52,168,83,0.2) 100%)',
+          background: 'linear-gradient(135deg, rgba(66,133,244,0.25) 0%, rgba(52,168,83,0.25) 100%)',
           textAlign: 'center',
           alignItems: 'center',
+          padding: '60px 40px',
         }}
       >
-        <span
+        <div
           style={{
-            fontSize: '24px',
+            fontSize: '22px',
             color: COLORS.googleYellow,
             fontWeight: 800,
-            letterSpacing: '2px',
+            letterSpacing: '3px',
             textTransform: 'uppercase',
+            marginBottom: '12px',
           }}
         >
-          RESUMO DA GOVERNANÇA
-        </span>
-        <h2 style={{ fontSize: '46px', color: COLORS.textPrimary, margin: '12px 0 24px 0' }}>
-          Europa (Rigor) • China (Controle Estatal) • EUA (Técnica)
+          RESUMO DA GOVERNANÇA GLOBAL
+        </div>
+
+        <h2
+          style={{
+            fontSize: '42px',
+            color: COLORS.textPrimary,
+            margin: '0 0 32px 0',
+            lineHeight: 1.3,
+            fontWeight: 700,
+          }}
+        >
+          🇪🇺 Rigor • 🇨🇳 Controle • 🇺🇸 Técnica
         </h2>
 
         <div
@@ -286,40 +348,37 @@ const Scene5CTA = () => {
             width: '100%',
             height: '2px',
             background: 'rgba(255,255,255,0.2)',
-            margin: '20px 0',
+            margin: '0 0 36px 0',
           }}
         />
 
-        <div style={{ marginTop: '10px' }}>
-          <h3
-            style={{
-              fontSize: '54px',
-              fontWeight: 900,
-              color: '#FFFFFF',
-              margin: '0 0 10px 0',
-              letterSpacing: '-1px',
-            }}
-          >
-            IAMAZING SCHOOL
-          </h3>
-          <p style={{ fontSize: '28px', color: COLORS.textSecondary, margin: 0 }}>
-            Aprenda a liderar e construir produtos em IA no novo cenário global.
-          </p>
-          <div
-            style={{
-              marginTop: '28px',
-              padding: '16px 40px',
-              borderRadius: '100px',
-              background: '#FFFFFF',
-              color: '#000000',
-              fontWeight: 800,
-              fontSize: '28px',
-              display: 'inline-block',
-              boxShadow: '0 10px 30px rgba(255,255,255,0.3)',
-            }}
-          >
-            iamazing.school 🚀
-          </div>
+        <h3
+          style={{
+            fontSize: '56px',
+            fontWeight: 900,
+            color: '#FFFFFF',
+            margin: '0 0 16px 0',
+            letterSpacing: '-1px',
+          }}
+        >
+          IAMAZING SCHOOL
+        </h3>
+        <p style={{ fontSize: '28px', color: COLORS.textSecondary, margin: '0 0 36px 0' }}>
+          Domine e lidere a criação de produtos com Inteligência Artificial.
+        </p>
+
+        <div
+          style={{
+            padding: '20px 48px',
+            borderRadius: '100px',
+            background: '#FFFFFF',
+            color: '#000000',
+            fontWeight: 900,
+            fontSize: '32px',
+            boxShadow: '0 15px 40px rgba(255,255,255,0.4)',
+          }}
+        >
+          iamazing.school 🚀
         </div>
       </GlassCard>
     </div>
@@ -336,8 +395,9 @@ export const MainVideo: React.FC = () => {
     <AbsoluteFill
       style={{
         backgroundColor: COLORS.bg,
-        fontFamily: FONTS.primary,
-        padding: '80px 50px 120px 50px',
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif',
+        padding: '160px 50px 140px 50px', // Aumentado padding top para não cobrir com a barra LIVE
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -345,56 +405,49 @@ export const MainVideo: React.FC = () => {
         overflow: 'hidden',
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          top: '-10%',
-          left: '-10%',
-          width: '600px',
-          height: '600px',
-          borderRadius: '50%',
-          background: `radial-gradient(circle, ${COLORS.googleBlue}40 0%, transparent 70%)`,
-          filter: 'blur(80px)',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '-10%',
-          right: '-10%',
-          width: '600px',
-          height: '600px',
-          borderRadius: '50%',
-          background: `radial-gradient(circle, ${COLORS.googleGreen}35 0%, transparent 70%)`,
-          filter: 'blur(80px)',
-        }}
-      />
+      <AnimatedBackground />
 
+      {/* Cabeçalho Fixo Reposicionado no Topo Extremo */}
       <div
         style={{
           position: 'absolute',
-          top: '70px',
+          top: '60px',
           left: '60px',
           right: '60px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          zIndex: 10,
+          zIndex: 50,
         }}
       >
         <span
           style={{
-            fontSize: '22px',
-            fontWeight: 800,
+            fontSize: '24px',
+            fontWeight: 900,
             color: COLORS.textPrimary,
             letterSpacing: '2px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
           }}
         >
-          IA NEWS <span style={{ color: COLORS.googleRed }}>● LIVE</span>
+          IA NEWS <span style={{ color: COLORS.googleRed, fontSize: '18px' }}>● LIVE</span>
         </span>
-        <span style={{ fontSize: '20px', color: COLORS.textSecondary }}>08/08/2026</span>
+        <span
+          style={{
+            fontSize: '22px',
+            fontWeight: 700,
+            color: COLORS.textSecondary,
+            background: 'rgba(255,255,255,0.1)',
+            padding: '6px 16px',
+            borderRadius: '100px',
+          }}
+        >
+          08/08/2026
+        </span>
       </div>
 
+      {/* Sequência das Cenas */}
       <Sequence from={0} durationInFrames={120}>
         <Scene1Intro />
       </Sequence>
@@ -415,30 +468,32 @@ export const MainVideo: React.FC = () => {
         <Scene5CTA />
       </Sequence>
 
+      {/* Rodapé de Fontes */}
       <div
         style={{
           position: 'absolute',
-          bottom: '50px',
+          bottom: '40px',
           left: '60px',
           right: '60px',
           textAlign: 'center',
           fontSize: '18px',
           color: COLORS.textSecondary,
-          letterSpacing: '0.5px',
+          fontWeight: 500,
         }}
       >
-        Fontes: European AI Office, CAC (China), NIST (EUA), PL 2338/2023 (Congresso BR)
+        Fontes: European AI Office, CAC, NIST & PL 2338/2023
       </div>
 
+      {/* Barra de Progresso */}
       <div
         style={{
           position: 'absolute',
           bottom: '0',
           left: '0',
-          height: '8px',
+          height: '10px',
           width: `${progressPercent}%`,
           background: `linear-gradient(90deg, ${COLORS.googleBlue}, ${COLORS.googleRed}, ${COLORS.googleYellow}, ${COLORS.googleGreen})`,
-          boxShadow: '0 0 12px rgba(66,133,244,0.8)',
+          boxShadow: '0 0 16px rgba(66,133,244,0.9)',
         }}
       />
     </AbsoluteFill>
