@@ -22,6 +22,10 @@ async function startRender() {
   const composition = await selectComposition({
     containerTree: bundled,
     id: compositionId,
+    browserExecutable: '/usr/bin/chromium-browser',
+    chromiumOptions: {
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    },
   });
 
   const outputLocation = path.join(__dirname, '../out/video-ai-governance.mp4');
@@ -32,6 +36,10 @@ async function startRender() {
     serveUrl: bundled,
     codec: 'h264',
     outputLocation,
+    browserExecutable: '/usr/bin/chromium-browser',
+    chromiumOptions: {
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    },
   });
 
   console.log(`✅ Vídeo renderizado com sucesso em: ${outputLocation}`);
