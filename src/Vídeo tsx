@@ -20,8 +20,7 @@ const COLORS = {
   googleGreen: '#34A853',
 };
 
-// Componente para o fundo animado com orbes pulsantes
-const AnimatedBackground = () => {
+const AnimatedBackground: React.FC = () => {
   const frame = useCurrentFrame();
   const scale1 = 1 + Math.sin(frame / 20) * 0.1;
   const scale2 = 1 + Math.cos(frame / 25) * 0.15;
@@ -114,8 +113,7 @@ const TagBadge: React.FC<{ text: string; color: string; icon?: string }> = ({
   );
 };
 
-// CENA 1: HOOK
-const Scene1Intro = () => {
+const Scene1Intro: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -163,13 +161,18 @@ const Scene1Intro = () => {
   );
 };
 
-// CENA 2: UNIÃO EUROPEIA
-const Scene2EU = () => {
+const Scene2EU: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
   const slideIn = spring({ frame, fps, config: { damping: 14 } });
   const translateY = interpolate(slideIn, [0, 1], [120, 0]);
+
+  const items: string[] = [
+    'Poder formal de auditoria sobre modelos GPAI',
+    'Comprovação obrigatória de dados de treino',
+    'Rotulagem ostensiva de mídias sintéticas',
+  ];
 
   return (
     <div style={{ transform: `translateY(${translateY}px)`, width: '100%' }}>
@@ -189,11 +192,7 @@ const Scene2EU = () => {
         </h2>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {[
-            'Poder formal de auditoria sobre modelos GPAI',
-            'Comprovação obrigatória de dados de treino',
-            'Rotulagem ostensiva de mídias sintéticas',
-          ].map((item, index) => (
+          {items.map((item: string, index: number) => (
             <div
               key={index}
               style={{
@@ -217,8 +216,7 @@ const Scene2EU = () => {
   );
 };
 
-// CENA 3: CHINA E EUA
-const Scene3ChinaUSA = () => {
+const Scene3ChinaUSA: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -258,8 +256,7 @@ const Scene3ChinaUSA = () => {
   );
 };
 
-// CENA 4: BRASIL
-const Scene4Brazil = () => {
+const Scene4Brazil: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -300,8 +297,7 @@ const Scene4Brazil = () => {
   );
 };
 
-// CENA 5: RESUMO & CTA
-const Scene5CTA = () => {
+const Scene5CTA: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -397,7 +393,7 @@ export const MainVideo: React.FC = () => {
         backgroundColor: COLORS.bg,
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif',
-        padding: '160px 50px 140px 50px', // Aumentado padding top para não cobrir com a barra LIVE
+        padding: '160px 50px 140px 50px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -407,7 +403,6 @@ export const MainVideo: React.FC = () => {
     >
       <AnimatedBackground />
 
-      {/* Cabeçalho Fixo Reposicionado no Topo Extremo */}
       <div
         style={{
           position: 'absolute',
@@ -447,7 +442,6 @@ export const MainVideo: React.FC = () => {
         </span>
       </div>
 
-      {/* Sequência das Cenas */}
       <Sequence from={0} durationInFrames={120}>
         <Scene1Intro />
       </Sequence>
@@ -468,7 +462,6 @@ export const MainVideo: React.FC = () => {
         <Scene5CTA />
       </Sequence>
 
-      {/* Rodapé de Fontes */}
       <div
         style={{
           position: 'absolute',
@@ -484,7 +477,6 @@ export const MainVideo: React.FC = () => {
         Fontes: European AI Office, CAC, NIST & PL 2338/2023
       </div>
 
-      {/* Barra de Progresso */}
       <div
         style={{
           position: 'absolute',
@@ -499,3 +491,5 @@ export const MainVideo: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+export default MainVideo;          
