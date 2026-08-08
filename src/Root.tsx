@@ -8,7 +8,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="AIGovernanceVideo"
         component={MainVideo}
-        durationInFrames={900} // 30 segundos a 30 FPS
+        durationInFrames={900}
         fps={30}
         width={1080}
         height={1920}
